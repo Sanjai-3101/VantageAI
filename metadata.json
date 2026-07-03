@@ -1,0 +1,6 @@
+{
+  "name": "AI Travel Planner",
+  "description": "A premium, futuristic AI-powered Travel Planner featuring personalized day-by-day itineraries, smart hotel and restaurant recommendations, budget calculations, and real-time weather insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
