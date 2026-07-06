@@ -115,7 +115,7 @@ export default function Home({ setCurrentPage, user }: HomeProps) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-          className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-none max-w-5xl mx-auto mb-8 text-white"
+         className="font-display font-bold text-5xl sm:text-6xl lg:text-8xl tracking-tight leading-tight max-w-6xl mx-auto mb-8 text-white"
         >
           Your Next Adventure,{" "}
           <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent drop-shadow-sm">
@@ -127,7 +127,7 @@ export default function Home({ setCurrentPage, user }: HomeProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed"
+          className="text-slate-400 text-lg max-w-4xl mx-auto mb-12 leading-relaxed"
         >
           Ditch the browser tabs. VantageAI builds personalized, ultra-detailed itineraries, hotel curations, culinary hotspots, and instant weather estimates matching your exact budget and travel style.
         </motion.p>
@@ -158,7 +158,7 @@ export default function Home({ setCurrentPage, user }: HomeProps) {
           initial={{ opacity: 0, y: 45 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.4 }}
-          className="w-full max-w-5xl mx-auto rounded-[24px] border border-white/[0.06] bg-slate-950/40 p-4 sm:p-6 backdrop-blur-xl shadow-2xl shadow-indigo-500/5 relative group"
+          className="w-full max-w-7xl mx-auto rounded-[24px] border border-white/[0.06] bg-slate-950/40 p-4 sm:p-6 backdrop-blur-xl shadow-2xl shadow-indigo-500/5 relative group"
         >
           {/* Subtle border reflection glow */}
           <div className="absolute inset-0 rounded-[24px] bg-gradient-to-tr from-cyan-500/10 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
@@ -209,7 +209,7 @@ export default function Home({ setCurrentPage, user }: HomeProps) {
 
       {/* Featured Curated Destinations Grid */}
       <section className="py-20 border-t border-slate-900/80 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-screen-2xl mx-auto px-6 lg:px-12">
           <div className="text-center mb-16">
             <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-950/30 border border-cyan-800/40 px-3 py-1 rounded-full">
               AI Collections
