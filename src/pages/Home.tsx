@@ -99,7 +99,7 @@ export default function Home({ setCurrentPage, user }: HomeProps) {
       <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center relative z-10">
+    <section className="w-full max-w-screen-2xl mx-auto px-6 lg:px-12 pt-24 pb-20 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
