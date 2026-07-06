@@ -1,25 +1,159 @@
-  <!doctype html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
 
-      <!-- PWA Manifest -->
-      <link rel="manifest" href="/manifest.json" />
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
 
-      <!-- Theme Color -->
-      <meta name="theme-color" content="#2563eb" />
+  <!-- Icons -->
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
-      <!-- App Icon -->
-      <link rel="icon" type="image/png" href="/icon-192.png" />
-      <link rel="apple-touch-icon" href="/icon-192.png" />
+  <title>VantageAI</title>
 
-      <title>VantageAI</title>
-    </head>
+  <style>
+    html,
+    body,
+    #root {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+    }
 
-    <body>
-      <div id="root"></div>
+    body {
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background: #020512;
+    }
 
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
+    * {
+      box-sizing: border-box;
+    }
+
+    .install-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+    }
+
+    .install-card {
+      width: min(420px, 92%);
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px;
+      border-left: 6px solid #ef4444;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      animation: popup .25s ease;
+    }
+
+    @keyframes popup {
+      from {
+        transform: scale(.85);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    h2 {
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    #installBtn {
+      background: #2563eb;
+      color: white;
+    }
+
+    #laterBtn {
+      background: #e5e7eb;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="install-overlay" id="installOverlay">
+  <div class="install-card">
+    <h2>⚠ Install VantageAI</h2>
+
+    <p>
+      Install <strong>VantageAI</strong> for a faster and smoother experience with offline support.
+    </p>
+
+    <div class="buttons">
+      <button id="installBtn">Install</button>
+      <button id="laterBtn">Later</button>
+    </div>
+  </div>
+</div>
+
+<div id="root"></div>
+
+<script type="module" src="/src/main.tsx"></script>
+
+<script>
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installOverlay").style.display = "flex";
+});
+
+document.getElementById("installBtn").onclick = async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+
+  deferredPrompt = null;
+  document.getElementById("installOverlay").style.display = "none";
+};
+
+document.getElementById("laterBtn").onclick = () => {
+  document.getElementById("installOverlay").style.display = "none";
+};
+
+window.addEventListener("appinstalled", () => {
+  deferredPrompt = null;
+  document.getElementById("installOverlay").style.display = "none";
+});
+</script>
+
+</body>
+</html>
