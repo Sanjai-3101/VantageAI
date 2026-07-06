@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -15,17 +18,29 @@
   <title>VantageAI</title>
 
   <style>
-    * {
+    html,
+    body,
+    #root {
+      width: 100%;
+      min-height: 100%;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+    }
+
+    body {
+      overflow-x: hidden;
       font-family: Arial, sans-serif;
+      background: #020512;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     .install-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.65);
+      background: rgba(0, 0, 0, 0.65);
       display: none;
       justify-content: center;
       align-items: center;
@@ -33,13 +48,12 @@
     }
 
     .install-card {
-      width: 92%;
-      max-width: 420px;
-      background: white;
-      border-radius: 15px;
+      width: min(420px, 92%);
+      background: #fff;
+      border-radius: 16px;
       padding: 22px;
       border-left: 6px solid #ef4444;
-      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
       animation: popup .25s ease;
     }
 
@@ -72,9 +86,9 @@
 
     button {
       flex: 1;
+      padding: 12px;
       border: none;
       border-radius: 8px;
-      padding: 12px;
       cursor: pointer;
       font-size: 15px;
       font-weight: bold;
@@ -95,15 +109,14 @@
 
 <div class="install-overlay" id="installOverlay">
   <div class="install-card">
-    <h2>⚠ Install Required</h2>
+    <h2>⚠ Install VantageAI</h2>
 
     <p>
-      Install <strong>VantageAI</strong> for a faster,
-      smoother experience with offline support.
+      Install <strong>VantageAI</strong> for a faster and smoother experience with offline support.
     </p>
 
     <div class="buttons">
-      <button id="installBtn">Install Now</button>
+      <button id="installBtn">Install</button>
       <button id="laterBtn">Later</button>
     </div>
   </div>
@@ -117,38 +130,28 @@
 let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-
-    deferredPrompt = e;
-
-    document.getElementById("installOverlay").style.display = "flex";
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installOverlay").style.display = "flex";
 });
 
-document.getElementById("installBtn").addEventListener("click", async () => {
+document.getElementById("installBtn").onclick = async () => {
+  if (!deferredPrompt) return;
 
-    if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
 
-    deferredPrompt.prompt();
+  deferredPrompt = null;
+  document.getElementById("installOverlay").style.display = "none";
+};
 
-    const { outcome } = await deferredPrompt.userChoice;
-
-    console.log("Install result:", outcome);
-
-    deferredPrompt = null;
-
-    document.getElementById("installOverlay").style.display = "none";
-});
-
-document.getElementById("laterBtn").addEventListener("click", () => {
-    document.getElementById("installOverlay").style.display = "none";
-});
+document.getElementById("laterBtn").onclick = () => {
+  document.getElementById("installOverlay").style.display = "none";
+};
 
 window.addEventListener("appinstalled", () => {
-    console.log("App Installed");
-
-    document.getElementById("installOverlay").style.display = "none";
-
-    deferredPrompt = null;
+  deferredPrompt = null;
+  document.getElementById("installOverlay").style.display = "none";
 });
 </script>
 
