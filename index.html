@@ -15,10 +15,111 @@
     <link rel="apple-touch-icon" href="/icon-192.png" />
 
     <title>VantageAI</title>
+
+    <style>
+      #install-overlay {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(92%, 420px);
+        background: rgba(17, 24, 39, 0.95);
+        color: white;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        z-index: 99999;
+        display: none;
+        font-family: Arial, sans-serif;
+      }
+
+      #install-overlay h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+
+      #install-overlay p {
+        margin: 0 0 16px;
+        color: #d1d5db;
+        line-height: 1.5;
+      }
+
+      .install-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .install-buttons button {
+        flex: 1;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      #installBtn {
+        background: #2563eb;
+        color: white;
+      }
+
+      #dismissBtn {
+        background: #374151;
+        color: white;
+      }
+    </style>
   </head>
 
   <body>
+
+    <!-- Install PWA Overlay -->
+    <div id="install-overlay">
+      <h3>📱 Install VantageAI</h3>
+
+      <p>
+        Install VantageAI for a faster experience with offline support and quick
+        access directly from your Home Screen.
+      </p>
+
+      <div class="install-buttons">
+        <button id="installBtn">Install App</button>
+        <button id="dismissBtn">Later</button>
+      </div>
+    </div>
+
     <div id="root"></div>
+
+    <script>
+      let deferredPrompt;
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        document.getElementById("install-overlay").style.display = "block";
+      });
+
+      document.getElementById("installBtn").addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        document.getElementById("install-overlay").style.display = "none";
+      });
+
+      document.getElementById("dismissBtn").addEventListener("click", () => {
+        document.getElementById("install-overlay").style.display = "none";
+      });
+
+      window.addEventListener("appinstalled", () => {
+        document.getElementById("install-overlay").style.display = "none";
+        deferredPrompt = null;
+      });
+    </script>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>
