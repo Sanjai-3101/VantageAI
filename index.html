@@ -1,126 +1,156 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
 
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#2563eb" />
+  <!-- Icons -->
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
-    <!-- App Icon -->
-    <link rel="icon" type="image/png" href="/icon-192.png" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+  <title>VantageAI</title>
 
-    <title>VantageAI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-    <style>
-      #install-overlay {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(92%, 420px);
-        background: rgba(17, 24, 39, 0.95);
-        color: white;
-        border-radius: 16px;
-        padding: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,.35);
-        z-index: 99999;
-        display: none;
-        font-family: Arial, sans-serif;
+    .install-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+    }
+
+    .install-card {
+      width: 92%;
+      max-width: 420px;
+      background: white;
+      border-radius: 15px;
+      padding: 22px;
+      border-left: 6px solid #ef4444;
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      animation: popup .25s ease;
+    }
+
+    @keyframes popup {
+      from {
+        transform: scale(.85);
+        opacity: 0;
       }
-
-      #install-overlay h3 {
-        margin: 0 0 8px;
-        font-size: 18px;
+      to {
+        transform: scale(1);
+        opacity: 1;
       }
+    }
 
-      #install-overlay p {
-        margin: 0 0 16px;
-        color: #d1d5db;
-        line-height: 1.5;
-      }
+    h2 {
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
 
-      .install-buttons {
-        display: flex;
-        gap: 10px;
-      }
+    p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
 
-      .install-buttons button {
-        flex: 1;
-        border: none;
-        padding: 12px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 15px;
-      }
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
 
-      #installBtn {
-        background: #2563eb;
-        color: white;
-      }
+    button {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
 
-      #dismissBtn {
-        background: #374151;
-        color: white;
-      }
-    </style>
-  </head>
+    #installBtn {
+      background: #2563eb;
+      color: white;
+    }
 
-  <body>
+    #laterBtn {
+      background: #e5e7eb;
+    }
+  </style>
+</head>
 
-    <!-- Install PWA Overlay -->
-    <div id="install-overlay">
-      <h3>📱 Install VantageAI</h3>
+<body>
 
-      <p>
-        Install VantageAI for a faster experience with offline support and quick
-        access directly from your Home Screen.
-      </p>
+<div class="install-overlay" id="installOverlay">
+  <div class="install-card">
+    <h2>⚠ Install Required</h2>
 
-      <div class="install-buttons">
-        <button id="installBtn">Install App</button>
-        <button id="dismissBtn">Later</button>
-      </div>
+    <p>
+      Install <strong>VantageAI</strong> for a faster,
+      smoother experience with offline support.
+    </p>
+
+    <div class="buttons">
+      <button id="installBtn">Install Now</button>
+      <button id="laterBtn">Later</button>
     </div>
+  </div>
+</div>
 
-    <div id="root"></div>
+<div id="root"></div>
 
-    <script>
-      let deferredPrompt;
+<script type="module" src="/src/main.tsx"></script>
 
-      window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
+<script>
+let deferredPrompt = null;
 
-        document.getElementById("install-overlay").style.display = "block";
-      });
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
 
-      document.getElementById("installBtn").addEventListener("click", async () => {
-        if (!deferredPrompt) return;
+    deferredPrompt = e;
 
-        deferredPrompt.prompt();
+    document.getElementById("installOverlay").style.display = "flex";
+});
 
-        await deferredPrompt.userChoice;
+document.getElementById("installBtn").addEventListener("click", async () => {
 
-        deferredPrompt = null;
+    if (!deferredPrompt) return;
 
-        document.getElementById("install-overlay").style.display = "none";
-      });
+    deferredPrompt.prompt();
 
-      document.getElementById("dismissBtn").addEventListener("click", () => {
-        document.getElementById("install-overlay").style.display = "none";
-      });
+    const { outcome } = await deferredPrompt.userChoice;
 
-      window.addEventListener("appinstalled", () => {
-        document.getElementById("install-overlay").style.display = "none";
-        deferredPrompt = null;
-      });
-    </script>
+    console.log("Install result:", outcome);
 
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    deferredPrompt = null;
+
+    document.getElementById("installOverlay").style.display = "none";
+});
+
+document.getElementById("laterBtn").addEventListener("click", () => {
+    document.getElementById("installOverlay").style.display = "none";
+});
+
+window.addEventListener("appinstalled", () => {
+    console.log("App Installed");
+
+    document.getElementById("installOverlay").style.display = "none";
+
+    deferredPrompt = null;
+});
+</script>
+
+</body>
 </html>
